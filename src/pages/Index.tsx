@@ -59,7 +59,7 @@ const Index = () => {
           <FadeIn delay={200}>
             <section className="glass rounded-2xl p-6 md:p-8 mb-12">
               <h2 className="text-2xl font-semibold tracking-tight mb-6">Submit Today's Standup</h2>
-              <StandupForm onSubmit={handleAddStandup} />
+              <StandupForm onSubmit={handleAddStandup} standups={standups} />
             </section>
           </FadeIn>
 

@@ -1,31 +1,48 @@
 
-import { useState } from "react";
-import { Standup } from "@/types";
+import { useState, useEffect } from "react";
+import { Standup, TeamMember } from "@/types";
 import { generateId, getTodayDate } from "@/utils/standupUtils";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface StandupFormProps {
   onSubmit: (standup: Standup) => void;
+  standups: Standup[]; // Add standups prop to check for existing submissions
 }
 
-// List of team members
-const TEAM_MEMBERS = [
-  "Alex Johnson",
-  "Jamie Smith",
-  "Taylor Brown",
-  "Jordan Wilson",
-  "Casey Miller"
+// Initial list of team members
+const INITIAL_TEAM_MEMBERS: TeamMember[] = [
+  { name: "Alex Johnson", hasSubmittedToday: false },
+  { name: "Jamie Smith", hasSubmittedToday: false },
+  { name: "Taylor Brown", hasSubmittedToday: false },
+  { name: "Jordan Wilson", hasSubmittedToday: false },
+  { name: "Casey Miller", hasSubmittedToday: false }
 ];
 
-const StandupForm = ({ onSubmit }: StandupFormProps) => {
+const StandupForm = ({ onSubmit, standups }: StandupFormProps) => {
   const { toast } = useToast();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     yesterday: "",
     today: "",
     blocked: "",
   });
+
+  // Initialize team members and check for today's submissions
+  useEffect(() => {
+    const today = getTodayDate();
+    
+    // Mark team members who have already submitted today
+    const updatedTeamMembers = INITIAL_TEAM_MEMBERS.map(member => {
+      const hasSubmitted = standups.some(
+        standup => standup.name === member.name && standup.date === today
+      );
+      return { ...member, hasSubmittedToday: hasSubmitted };
+    });
+    
+    setTeamMembers(updatedTeamMembers);
+  }, [standups]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -82,6 +99,9 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
     });
   };
 
+  // Get available team members (those who haven't submitted today)
+  const availableTeamMembers = teamMembers.filter(member => !member.hasSubmittedToday);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
       <div className="space-y-2">
@@ -93,11 +113,17 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
             <SelectValue placeholder="Select team member" />
           </SelectTrigger>
           <SelectContent>
-            {TEAM_MEMBERS.map((member) => (
-              <SelectItem key={member} value={member}>
-                {member}
+            {availableTeamMembers.length > 0 ? (
+              availableTeamMembers.map((member) => (
+                <SelectItem key={member.name} value={member.name}>
+                  {member.name}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="no-members" disabled>
+                All team members have submitted today
               </SelectItem>
-            ))}
+            )}
           </SelectContent>
         </Select>
       </div>

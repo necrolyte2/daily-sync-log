@@ -7,3 +7,8 @@ export interface Standup {
   today: string;
   blocked: string;
 }
+
+export interface TeamMember {
+  name: string;
+  hasSubmittedToday: boolean;
+}
