@@ -30,13 +30,15 @@ export const getTodayDate = (): string => {
 };
 
 // Format a date string (YYYY-MM-DD) to a more readable format
-export const formatDate = (dateString: string): string => {
-  const options: Intl.DateTimeFormatOptions = {
+export const formatDate = (dateString: string, options?: Intl.DateTimeFormatOptions): string => {
+  const defaultOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   };
   
-  return new Date(dateString).toLocaleDateString(undefined, options);
+  const mergedOptions = options || defaultOptions;
+  
+  return new Date(dateString).toLocaleDateString(undefined, mergedOptions);
 };

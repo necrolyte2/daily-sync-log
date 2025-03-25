@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const NavBar = () => {
@@ -30,25 +31,27 @@ const NavBar = () => {
     >
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">DS</span>
-          </div>
-          <h1 className="text-xl font-semibold tracking-tight">Daily Sync</h1>
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">DS</span>
+            </div>
+            <h1 className="text-xl font-semibold tracking-tight">Daily Sync</h1>
+          </Link>
         </div>
         
         <nav className="hidden md:flex items-center space-x-8">
-          <a
-            href="#"
+          <Link
+            to="/"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
             Dashboard
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/team"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
             Team
-          </a>
+          </Link>
           <a
             href="#"
             className="text-sm font-medium transition-colors hover:text-primary"
