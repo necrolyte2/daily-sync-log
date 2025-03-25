@@ -41,23 +41,11 @@ const NavBar = () => {
         
         <nav className="hidden md:flex items-center space-x-8">
           <Link
-            to="/"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Dashboard
-          </Link>
-          <Link
             to="/team"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
-            Team
+            Previous Standups
           </Link>
-          <a
-            href="#"
-            className="text-sm font-medium transition-colors hover:text-primary"
-          >
-            Analytics
-          </a>
         </nav>
         
         <div className="flex items-center space-x-4">

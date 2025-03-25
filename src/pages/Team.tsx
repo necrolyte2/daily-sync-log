@@ -46,7 +46,7 @@ const Team = () => {
                 <span className="text-xs font-medium">Team History</span>
               </div>
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4">
-                Team Standup Log
+                Previous Standups
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Review past standups organized by date to see what your team has been working on.
