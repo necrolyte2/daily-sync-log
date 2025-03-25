@@ -28,9 +28,14 @@ const StandupItem = ({ standup, onDelete }: StandupItemProps) => {
         className="flex flex-col sm:flex-row sm:items-center justify-between p-4 cursor-pointer standup-transition"
       >
         <div className="flex flex-col">
-          <span className="text-sm text-muted-foreground">
-            {formatDate(standup.date)}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">
+              {formatDate(standup.date)}
+            </span>
+            <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-md">
+              {standup.name}
+            </span>
+          </div>
           <h3 className="font-medium text-lg mt-1 line-clamp-1">
             {standup.today}
           </h3>
@@ -55,28 +60,12 @@ const StandupItem = ({ standup, onDelete }: StandupItemProps) => {
       
       {expanded && (
         <div className="px-4 pb-4 space-y-4 animate-fade-in">
-          <div className="space-y-1">
-            <div className="inline-flex items-center px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30">
-              <span className="text-xs font-medium text-blue-800 dark:text-blue-300">Yesterday</span>
-            </div>
-            <p className="text-sm whitespace-pre-line">{standup.yesterday}</p>
+          <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg font-mono text-sm whitespace-pre-line">
+            <div className="font-medium mb-2">{standup.name}</div>
+            <div>Y: {standup.yesterday}</div>
+            <div>T: {standup.today}</div>
+            {standup.blocked && <div>B: {standup.blocked}</div>}
           </div>
-          
-          <div className="space-y-1">
-            <div className="inline-flex items-center px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30">
-              <span className="text-xs font-medium text-green-800 dark:text-green-300">Today</span>
-            </div>
-            <p className="text-sm whitespace-pre-line">{standup.today}</p>
-          </div>
-          
-          {standup.blocked && (
-            <div className="space-y-1">
-              <div className="inline-flex items-center px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30">
-                <span className="text-xs font-medium text-amber-800 dark:text-amber-300">Blocked</span>
-              </div>
-              <p className="text-sm whitespace-pre-line">{standup.blocked}</p>
-            </div>
-          )}
           
           <div className="flex justify-end pt-2">
             <button

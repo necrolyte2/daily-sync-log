@@ -3,14 +3,25 @@ import { useState } from "react";
 import { Standup } from "@/types";
 import { generateId, getTodayDate } from "@/utils/standupUtils";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface StandupFormProps {
   onSubmit: (standup: Standup) => void;
 }
 
+// List of team members
+const TEAM_MEMBERS = [
+  "Alex Johnson",
+  "Jamie Smith",
+  "Taylor Brown",
+  "Jordan Wilson",
+  "Casey Miller"
+];
+
 const StandupForm = ({ onSubmit }: StandupFormProps) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
+    name: "",
     yesterday: "",
     today: "",
     blocked: "",
@@ -26,14 +37,21 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
     }));
   };
 
+  const handleNameChange = (name: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      name,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
-    if (!formData.yesterday.trim() || !formData.today.trim()) {
+    if (!formData.name || !formData.yesterday.trim() || !formData.today.trim()) {
       toast({
         title: "Missing information",
-        description: "Please fill in what you did yesterday and what you plan to do today.",
+        description: "Please select a name and fill in what you did yesterday and what you plan to do today.",
         variant: "destructive",
       });
       return;
@@ -42,6 +60,7 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
     const newStandup: Standup = {
       id: generateId(),
       date: getTodayDate(),
+      name: formData.name,
       yesterday: formData.yesterday,
       today: formData.today,
       blocked: formData.blocked,
@@ -51,6 +70,7 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
     
     // Reset form
     setFormData({
+      name: "",
       yesterday: "",
       today: "",
       blocked: "",
@@ -64,6 +84,24 @@ const StandupForm = ({ onSubmit }: StandupFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
+      <div className="space-y-2">
+        <div className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900">
+          <span className="text-xs font-medium text-purple-800 dark:text-purple-300">Team Member</span>
+        </div>
+        <Select value={formData.name} onValueChange={handleNameChange}>
+          <SelectTrigger className="w-full p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+            <SelectValue placeholder="Select team member" />
+          </SelectTrigger>
+          <SelectContent>
+            {TEAM_MEMBERS.map((member) => (
+              <SelectItem key={member} value={member}>
+                {member}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      
       <div className="space-y-2">
         <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900">
           <span className="text-xs font-medium text-blue-800 dark:text-blue-300">Yesterday</span>
